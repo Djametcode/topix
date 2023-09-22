@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import React from "react";
 import HeaderComponent from "./components/header";
 import "./index.css";
@@ -12,6 +13,8 @@ class App extends React.Component {
     this.state = {
       notesData: initialData,
       arciveNoteData: arcivedNote,
+      isSearch: false,
+      SearchResult: [],
     };
 
     this.addNotes = (notesData) => {
@@ -25,8 +28,13 @@ class App extends React.Component {
         (item) => item.id !== notesId
       );
 
+      const updatedArcive = this.state.arciveNoteData.filter(
+        (item) => item.id !== notesId
+      );
+
       this.setState({
         notesData: updateNotes,
+        arciveNoteData: updatedArcive,
       });
     };
 
@@ -61,20 +69,58 @@ class App extends React.Component {
         };
       });
     };
+
+    this.unArciveNote = (notesId) => {
+      const notesIndex = this.state.arciveNoteData.findIndex(
+        (item) => item.id === notesId
+      );
+
+      const notesUnarcived = this.state.arciveNoteData.filter(
+        (item) => item !== this.state.arciveNoteData[notesIndex]
+      );
+
+      this.setState({
+        arciveNoteData: notesUnarcived,
+      });
+
+      this.setState((prev) => ({
+        notesData: [...prev.notesData, this.state.arciveNoteData[notesIndex]],
+      }));
+    };
+
+    this.setIsSearch = (value) => {
+      console.log(this.state.SearchResult);
+      this.setState({
+        isSearch: value,
+      });
+    };
+
+    this.setSearchResult = (dataFromSearch) => {
+      this.setState({
+        SearchResult: dataFromSearch,
+      });
+    };
   }
   render() {
     return (
       <div>
         <HeaderComponent
+          setSearchResult={this.setSearchResult}
+          setIsSearch={this.setIsSearch}
           notes={this.state.notesData}
           arcive={this.state.arciveNoteData}
         />
-        <NotesAdder
-          updateNotes={this.addNotes}
-          notesData={this.state.notesData}
-        />
+        {this.state.isSearch ? null : (
+          <NotesAdder
+            updateNotes={this.addNotes}
+            notesData={this.state.notesData}
+          />
+        )}
         <MainComponents
+          isSearch={this.state.isSearch}
+          SearchResult={this.state.SearchResult}
           arciveNoteHandler={this.arciveNotesHandler}
+          unArchiveNoteHandler={this.unArciveNote}
           deleteNotes={this.deleteNotes}
           notesData={this.state.notesData}
           arcivedNote={this.state.arciveNoteData}

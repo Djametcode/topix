@@ -7,26 +7,32 @@ class HeaderComponent extends React.Component {
     super(props);
 
     this.state = {
-      notes: this.props.notes,
       searchText: "",
     };
 
     this.handleInputChange = (event) => {
       const text = event.target.value;
+
+      this.props.setIsSearch(true);
+
       this.setState({
         searchText: text,
-        isSearch: true,
       });
 
-      const searchNotes = this.state.notes.filter(
-        (item) =>
-          item.title
-            .toLowerCase()
-            .includes(this.state.searchText.toLowerCase()) ||
-          item.body.toLowerCase().includes(this.state.searchText.toLowerCase())
-      );
+      if (this.state.searchText.trim() || this.state.searchText == "") {
+        this.props.setSearchResult(this.props.notes);
+      }
 
-      console.log(searchNotes);
+      const searchNotes = this.props.notes.filter((item) =>
+        item.title
+          .toLowerCase()
+          .includes(this.state.searchText.trim().toLowerCase())
+      );
+      this.props.setSearchResult(searchNotes);
+    };
+    this.onClickInput = () => {
+      this.props.setIsSearch(true);
+      this.props.setSearchResult(this.props.notes);
     };
   }
   render() {
@@ -35,6 +41,8 @@ class HeaderComponent extends React.Component {
         <h1>Catatan Pribadi</h1>
         <div id="notes-search-container">
           <input
+            onBlur={() => this.props.setIsSearch(false)}
+            onClick={this.onClickInput}
             onChange={this.handleInputChange.bind(this)}
             className="input-search"
             type="text"

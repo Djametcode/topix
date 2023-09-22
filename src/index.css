@@ -98,6 +98,8 @@
 }
 
 .main-container {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -109,11 +111,13 @@
 }
 
 #notes-detail-wrapper {
+    height: 100%;
+    width: 100%;
     display: flex;
-    padding: 20px;
-    align-items: center;
+    flex-wrap: wrap;
     gap: 20px;
-    flex-wrap: wrap
+    padding: 20px;
+    margin: auto;
 }
 
 .notes-detail {
@@ -160,9 +164,13 @@
 :root {
     background-color: #F1F6F9;
     margin: 0;
+    width: 100%;
+    height: 100%;
 }
 
 body {
+    width: 100%;
+    height: 100vh;
     margin: 0;
     padding: 0;
 }
@@ -228,5 +236,22 @@ body {
     border: none;
     border-bottom-right-radius: 15px;
     background-color: #fff;
+}
+
+#search-result {
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    flex-wrap: wrap;
+}
+
+#not-found-notes {
+    font-family: 'Figtree', sans-serif;
+    font-size: 12px;
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
 }
 

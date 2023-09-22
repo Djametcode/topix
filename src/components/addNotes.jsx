@@ -9,7 +9,6 @@ class NotesAdder extends React.Component {
       title: "",
       body: "",
       titleLimit: 30,
-      bodyLimit: 50,
       createdAt: new Date().toISOString(),
       arcived: false,
     };
@@ -35,17 +34,8 @@ class NotesAdder extends React.Component {
     this.handleBodyChange = (event) => {
       const body = event.target.value;
 
-      this.setState((prev) => {
-        const updatedBodyLimit = prev.bodyLimit - 1;
-
-        if (updatedBodyLimit >= 0) {
-          return {
-            body: body,
-            bodyLimit: updatedBodyLimit,
-          };
-        } else {
-          return;
-        }
+      this.setState({
+        body: body,
       });
     };
 
@@ -65,6 +55,11 @@ class NotesAdder extends React.Component {
       console.log(newNote);
 
       this.props.updateNotes(newNote);
+
+      this.setState({
+        title: "",
+        body: "",
+      });
     };
   }
   render() {
@@ -92,16 +87,6 @@ class NotesAdder extends React.Component {
             type="text"
             placeholder="Notes Title"
           />
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              fontSize: "14px",
-            }}
-          >
-            <label>Catatan : </label>
-            <label> {this.state.bodyLimit} char left </label>
-          </div>
           <textarea
             value={this.state.body}
             className="input-forms"
